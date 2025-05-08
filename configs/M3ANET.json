@@ -1,0 +1,47 @@
+{   
+    "network_config": {
+        "L1":0.0025,
+        "L2":0.01,
+        "L3":0.02,
+        "enc_channel": 128,
+        "feature_channel": 64,
+        "encoder_kernel_size": 8,
+        "layers": 4,
+        "rnn_type": "LSTM" ,
+        "norm": "ln",
+        
+        "dropout": 0,
+        "bidirectional": true,
+        "kernel": 3,
+        "CMCA_layer_num": 3,
+        "N":256,
+        "L":20,
+        "B":32,
+        "H":128,
+        "K":100,
+        "R":6
+    },
+    "train_config": {
+        "exp_path": "M3ANET",
+        "log":{
+            "directory": "./exp",
+            "ckpt_iter": "max",
+            "iters_per_ckpt": 500
+        },
+        "optimization":{
+            "epochs": 60,
+            "learning_rate": 6e-4,
+            "batch_size_per_gpu": 8
+        }
+    },
+    "trainset_config": {
+        "root": "/media/datasets/AAD_enhance"
+    },
+    "gen_config":{
+        "output_directory": "./exp"
+    },
+    "dist_config": {
+        "dist_backend": "nccl",
+        "dist_url": "tcp://localhost:54321"
+    }
+}

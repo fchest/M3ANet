@@ -1,0 +1,6 @@
+{
+  "test": {
+    "model_path": "exp/M3ANET/checkpoint/124000.pkl",
+    "dataset_root": "/media/datasets/AAD_enhance"
+  }
+}
