@@ -14,9 +14,9 @@ This paper proposes a multi-scale and multi-modal alignment Network (M3ANet) for
 - mamba-ssm  1.2.0
 
 ## Datasets
-- The source and processing of the Cocktail Party dataset can be obtained [here]([jzhangU/Basen: This repository provides the Python code to reproduce the ISCA Interspeech 2023 paper entitled "BASEN: Time-Domain Brain-Assisted Speech Enhancement Network with Convolutional Cross Attention in Multi-talker Conditions".](https://github.com/jzhangU/Basen))
-- AVED dataset can be obtained [here]([Based on audio-video evoked auditory attention detection electroencephalogram dataset](https://www.sciopen.com/article/10.16511/j.cnki.qhdxxb.2024.26.024))
-- MM-AAD dataset can be obtained [here]([Seeing helps hearing: : A multi-modal dataset and a mamba-based dual branch parallel network for auditory attention decoding: Information Fusion: Vol 118, No C](https://dl.acm.org/doi/10.1016/j.inffus.2025.102946))
+- The source and processing of the Cocktail Party dataset can be obtained [here](https://github.com/jzhangU/Basen)
+- AVED dataset can be obtained [here](https://www.sciopen.com/article/10.16511/j.cnki.qhdxxb.2024.26.024))
+- MM-AAD dataset can be obtained [here](https://dl.acm.org/doi/10.1016/j.inffus.2025.102946)
 
 ## Run
 
