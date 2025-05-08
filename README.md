@@ -5,8 +5,7 @@ Pytorch implementation on: M3ANet: Multi-scale and Multi-Modal Alignment Network
 ## Introduction
 
 This paper proposes a multi-scale and multi-modal alignment Network (M3ANet) for brain-assisted TSE. Specifically, to eliminate the temporal inconsistency between EEG and speech modalities, the modal alignment module that uses a contrastive learning strategy is applied to align the temporal features of both modalities. Additionally, to fully extract speech information, multi-scale convolutions with GroupMamba modules are used as the speech encoder, which scans speech features at each scale from different directions, enabling the model to capture deepe sequence information. Experimental results on three publicly available datasets show that the proposed model outperforms current state-of-the-art methods across various evaluation metrics, highlighting the effectiveness of our proposed method.
-
-![overall_公众号](D:\写论文\图\overall_公众号.jpg)
+<img src="overall.jpg">
 
 ## Requiements
 
