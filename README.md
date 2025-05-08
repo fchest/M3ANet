@@ -15,7 +15,7 @@ This paper proposes a multi-scale and multi-modal alignment Network (M3ANet) for
 
 ## Datasets
 - The source and processing of the Cocktail Party dataset can be obtained [here](https://github.com/jzhangU/Basen)
-- AVED dataset can be obtained [here](https://www.sciopen.com/article/10.16511/j.cnki.qhdxxb.2024.26.024))
+- AVED dataset can be obtained [here](https://www.sciopen.com/article/10.16511/j.cnki.qhdxxb.2024.26.024)
 - MM-AAD dataset can be obtained [here](https://dl.acm.org/doi/10.1016/j.inffus.2025.102946)
 
 ## Run
