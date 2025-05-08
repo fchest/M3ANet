@@ -1,2 +1,32 @@
 # M3ANet
-The code will be available soon.
+
+Pytorch implementation on: M3ANet: Multi-scale and Multi-Modal Alignment Network for Brain-Assisted Target Speaker Extraction.
+
+## Introduction
+
+This paper proposes a multi-scale and multi-modal alignment Network (M3ANet) for brain-assisted TSE. Specifically, to eliminate the temporal inconsistency between EEG and speech modalities, the modal alignment module that uses a contrastive learning strategy is applied to align the temporal features of both modalities. Additionally, to fully extract speech information, multi-scale convolutions with GroupMamba modules are used as the speech encoder, which scans speech features at each scale from different directions, enabling the model to capture deepe sequence information. Experimental results on three publicly available datasets show that the proposed model outperforms current state-of-the-art methods across various evaluation metrics, highlighting the effectiveness of our proposed method.
+
+![overall_公众号](D:\写论文\图\overall_公众号.jpg)
+
+## Requiements
+
+- python 3.10
+- torch  2.1.1+cu118
+- mamba-ssm  1.2.0
+
+## Datasets
+- The source and processing of the Cocktail Party dataset can be obtained [here]([jzhangU/Basen: This repository provides the Python code to reproduce the ISCA Interspeech 2023 paper entitled "BASEN: Time-Domain Brain-Assisted Speech Enhancement Network with Convolutional Cross Attention in Multi-talker Conditions".](https://github.com/jzhangU/Basen))
+- AVED dataset can be obtained [here]([Based on audio-video evoked auditory attention detection electroencephalogram dataset](https://www.sciopen.com/article/10.16511/j.cnki.qhdxxb.2024.26.024))
+- MM-AAD dataset can be obtained [here]([Seeing helps hearing: : A multi-modal dataset and a mamba-based dual branch parallel network for auditory attention decoding: Information Fusion: Vol 118, No C](https://dl.acm.org/doi/10.1016/j.inffus.2025.102946))
+
+## Run
+
+You can change the config in ```config/M3ANET.json``` and in ```config/experiments.json```.
+
+### Train
+
+```python distributed.py -c configs/M3ANET.json```
+
+### Test
+
+```python test.py -c configs/experiments.json```
