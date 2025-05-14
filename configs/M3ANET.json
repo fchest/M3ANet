@@ -1,25 +1,20 @@
 {   
     "network_config": {
         "L1":0.0025,
-        "L2":0.01,
-        "L3":0.02,
+        "L2":0.005,
+        "L3":0.01,
+        "L4":0.02,
         "enc_channel": 128,
         "feature_channel": 64,
         "encoder_kernel_size": 8,
         "layers": 4,
-        "rnn_type": "LSTM" ,
+        "rnn_type": "LSTM",
         "norm": "ln",
-        
+        "K": 250,
         "dropout": 0,
         "bidirectional": true,
         "kernel": 3,
-        "CMCA_layer_num": 3,
-        "N":256,
-        "L":20,
-        "B":32,
-        "H":128,
-        "K":100,
-        "R":6
+        "CMCA_layer_num": 3
     },
     "train_config": {
         "exp_path": "M3ANET",
