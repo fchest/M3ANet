@@ -220,12 +220,6 @@ def cosine_similarity(a, b):
 
 
 def info_nce_loss(eeg_features, img_features, tau=0.1):
-    '''
-    输入：
-        eeg_features:(B, C, T)
-        img_features:(B, C, T)
-    '''
-
     
     batch_size = eeg_features.shape[0]
 
