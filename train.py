@@ -76,7 +76,7 @@ def train(num_gpus, rank, group_name,
     print('Data loaded')
     
     # predefine model
-    net = M3ANET(L1=network_config["L1"], L2=network_config["L2"], L3=network_config["L3"], enc_channel=network_config["enc_channel"], 
+    net = M3ANET(L1=network_config["L1"], L2=network_config["L2"], L3=network_config["L3"], L4=network_config["L4"], enc_channel=network_config["enc_channel"], 
                 feature_channel=network_config["feature_channel"],encoder_kernel_size=network_config["encoder_kernel_size"],
                 layers=network_config["layers"], rnn_type=network_config["rnn_type"], norm=network_config["norm"],
                 K=network_config["K"], dropout=network_config["dropout"], bidirectional=network_config["bidirectional"],
