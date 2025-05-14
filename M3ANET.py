@@ -14,6 +14,7 @@ from models.ss2d import SS2D
 from models.csms6s import CrossScan_1, CrossScan_2, CrossScan_3, CrossScan_4
 from models.csms6s import CrossMerge_1, CrossMerge_2, CrossMerge_3, CrossMerge_4
 from models.groupmamba import FFN,PVT2FFN
+from models.tfgridnet import TFGridNet
 
 
 class Chebynet(nn.Module):
@@ -49,8 +50,8 @@ class EEGEncoder(nn.Module):
         self.K=k_adj
         self.K = K
         self.BN1 = nn.BatchNorm1d(29184)
-        self.layer1 = Chebynet(128, k_adj)
-        self.projection = nn.Conv1d(128, feature_channel, self.proj_kernel_size, bias=False, stride=self.stride)
+        self.layer1 = Chebynet(num_electrodes, k_adj)
+        self.projection = nn.Conv1d(num_electrodes, feature_channel, self.proj_kernel_size, bias=False, stride=self.stride)
         self.A = nn.Parameter(torch.FloatTensor(num_electrodes , num_electrodes).cuda())
         nn.init.xavier_normal_(self.A)
 
@@ -74,29 +75,7 @@ class EEGEncoder(nn.Module):
         output = self.eeg_encoder(output)   
 
 
-
-
         return output
-
-  
-class Decoder(nn.ConvTranspose1d):
-    def __init__(self, *args, **kwargs):
-        super(Decoder, self).__init__(*args, **kwargs)
-
-    def forward(self, x):  
-        """
-        x: [B, N, L]
-        """
-        if x.dim() not in [2, 3]:
-            raise RuntimeError("{} accept 3/4D tensor as input".format(
-                self.__name__))
-        x = super().forward(x if x.dim() == 3 else torch.unsqueeze(x, 1))
-
-        if torch.squeeze(x).dim() == 1:
-            x = torch.squeeze(x, dim=1)
-        else:
-            x = torch.squeeze(x)
-        return x
 
 class  VSSS(nn.Module):
     def __init__(self, input_dim, layer) -> None:
@@ -116,7 +95,24 @@ class  VSSS(nn.Module):
             ssm_ratio=self.expand,
             d_conv=self.d_conv
         )
-        
+        self.mamba_block2 = SS2D(
+            d_model=1,
+            d_state=self.d_state,
+            ssm_ratio=self.expand,
+            d_conv=self.d_conv
+        )
+        self.mamba_block3 = SS2D(
+            d_model=1,
+            d_state=self.d_state,
+            ssm_ratio=self.expand,
+            d_conv=self.d_conv
+        )
+        self.mamba_block4 = SS2D(
+            d_model=1,
+            d_state=self.d_state,
+            ssm_ratio=self.expand,
+            d_conv=self.d_conv
+        )
         self.layer = layer
         
         self.channel = 4
@@ -189,14 +185,22 @@ class M3ANET(nn.Module):
         self.encoder_1d_L1 = Conv1D(1, enc_channel, self.L1, stride=self.L1 // 2, padding=0)
         self.encoder_1d_L2 = Conv1D(1, enc_channel, self.L2, stride=self.L1 // 2, padding=0)
         self.encoder_1d_L3 = Conv1D(1, enc_channel, self.L3, stride=self.L1 // 2, padding=0)
-        self.encoder_1d_L4 = Conv1D(1, enc_channel, self.L4, stride=self.L1 // 2, padding=0)   #xm
+        self.encoder_1d_L4 = Conv1D(1, enc_channel, self.L4, stride=self.L1 // 2, padding=0)   
+        
+        self.encoder_2d_short = nn.Conv2d(2, 2, 8, 4, padding=0)
+        #定义vsss层
         
         self.vsss_block = VSSS(input_dim = 4, layer= 2) 
+        
 
         self.ln = ChannelwiseLayerNorm(4*enc_channel)
         self.ln1 = ChannelwiseLayerNorm(enc_channel)
+        # self.ln = ChannelwiseLayerNorm(3*enc_channel)
         # n x N x T => n x O x T
         self.proj = Conv1D(4*enc_channel, enc_channel, 1)
+        # self.proj = Conv1D(3*enc_channel, enc_channel, 1)
+        #tfgridnet
+        self.gridnet = TFGridNet()
         # DPRNN separation network
         self.DPRNN = models.DPRNN(self.enc_channel, self.enc_channel, self.feature_channel,
                               self.layer, self.CMCA_kernel ,rnn_type=rnn_type, norm=norm, K=self.K, dropout=dropout,
@@ -205,7 +209,8 @@ class M3ANET(nn.Module):
         # output decoder
         self.decoder = ConvTrans1D(enc_channel, 1, self.L1 , stride=self.L1 // 2, bias=True)
         self.linear = nn.Linear(4,1)
-        self.conv1d = nn.Conv1d(self.enc_channel, self.feature_channel, 1)
+        self.conv1d = nn.Conv1d(128,64,1)
+        self.linear_interpolation = nn.Linear(270,1624)
         
     def pad_signal(self, input):
 
