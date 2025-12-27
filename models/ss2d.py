@@ -20,10 +20,12 @@ torch.backends.cudnn.deterministic = True
 
 try:
     from .csms6s import CrossScan, CrossMerge
-    from .csms6s import SelectiveScanMamba, SelectiveScanCore, SelectiveScanOflex
+    # from .csms6s import SelectiveScanMamba, SelectiveScanCore, SelectiveScanOflex
 except:
     from csms6s import CrossScan, CrossMerge
-    from csms6s import SelectiveScanMamba, SelectiveScanCore, SelectiveScanOflex
+    # from csms6s import SelectiveScanMamba, SelectiveScanCore, SelectiveScanOflex
+
+from mamba_ssm.ops.selective_scan_interface import SelectiveScanFn
 
 # =====================================================
 # we have this class as linear and conv init differ from each other
@@ -282,7 +284,7 @@ class SS2Dv2:
 
         # forward_type debug =======================================
         FORWARD_TYPES = dict(
-            v2=partial(self.forward_corev2, force_fp32=(not self.disable_force32), SelectiveScan=SelectiveScanCore),
+            v2=partial(self.forward_corev2, force_fp32=(not self.disable_force32), SelectiveScan=SelectiveScanFn),
         )
         self.forward_core = FORWARD_TYPES.get(forward_type, None)
         k_group = 1
@@ -352,7 +354,7 @@ class SS2Dv2:
         # ==============================
         ssoflex=True, # True: out fp32 in SSOflex; else, SSOflex is the same as SSCore
         # ==============================
-        SelectiveScan=SelectiveScanOflex,
+        SelectiveScan=SelectiveScanFn,
         CrossScan=CrossScan,
         CrossMerge=CrossMerge,
         no_einsum=False, # replace einsum with linear or conv1d to raise throughput
@@ -377,7 +379,7 @@ class SS2Dv2:
         L = H * W
 
         def selective_scan(u, delta, A, B, C, D=None, delta_bias=None, delta_softplus=True):
-            return SelectiveScan.apply(u, delta, A, B, C, D, delta_bias, delta_softplus, -1, -1, ssoflex)
+            return SelectiveScan.apply(u, delta, A, B, C, D, None, delta_bias, delta_softplus, False)
 
         if cascade2d:
             def scan_rowcol(
